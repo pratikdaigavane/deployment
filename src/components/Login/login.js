@@ -1,4 +1,4 @@
-import React, { z, useState } from 'react'
+import React, { useState } from 'react'
 import { makeStyles, 
          Card, 
          CardContent, 
@@ -73,7 +73,7 @@ function Login(props) {
                     "email": email,
                     "password": password
                 },
-                url: '/api/user/login/'
+                url: `${process.env.REACT_APP_HOST}/api/user/login/`
             })
             .then((res) => {
                 if(res.data) {
