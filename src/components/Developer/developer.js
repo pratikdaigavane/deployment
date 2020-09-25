@@ -1,15 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import { AppBar, 
-        Tabs, 
-        Tab, 
-        Tooltip,
-        Button,
-        makeStyles } from '@material-ui/core'
-import { MailOutline,
-         Person,
-         PowerSettingsNew } from '@material-ui/icons'
+import React, {useEffect, useState} from 'react'
+import {AppBar, Button, makeStyles, Tab, Tabs, Tooltip} from '@material-ui/core'
+import {MailOutline, Person, PowerSettingsNew} from '@material-ui/icons'
 import Routes from './routes'
-import { useHistory, useLocation } from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -32,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     tabButton: {
         paddingTop: '8px',
         '&.Mui-selected': {
-            outline: 'none',                                                                   
+            outline: 'none',
         },
         '&:hover': {
             outline: 'none'
@@ -47,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
         float: 'right',
         margin: '8px 10px',
         '&.Mui-selected': {
-            outline: 'none',                                                                   
+            outline: 'none',
         },
         '&:hover': {
             outline: 'none'
@@ -72,19 +65,19 @@ function Developer() {
 
     useEffect(() => {
         const path = location.pathname
-        if(path === '/developer/received') {
+        if (path === '/developer/received') {
             setTab(0);
         }
-        if(path.includes('/developer/profile')) {
+        if (path.includes('/developer/profile')) {
             setTab(1);
-        }   
+        }
     }, [location])
 
     const handleTabChange = (e, value) => {
         const tabValue = value
         setTab(tabValue)
-        
-        switch(tabValue) {
+
+        switch (tabValue) {
             case 0:
                 history.push('/developer/received');
                 break;
@@ -108,21 +101,22 @@ function Developer() {
                 <div className='d-inline-block'>
                     <p className={classes.title}>PULSE &mdash; X</p>
                     <Tabs
-                     value={tabValue}
-                     onChange={handleTabChange}
-                     indicatorColor='primary'
-                     textColor='primary'
-                     className={classes.tab}
+                        value={tabValue}
+                        onChange={handleTabChange}
+                        indicatorColor='primary'
+                        textColor='primary'
+                        className={classes.tab}
                     >
-                        <Tab 
-                         label={<div><MailOutline className={classes.icon}/>Received</div>} 
-                         className={classes.tabButton}/>
-                        <Tab 
-                         label={<div><Person className={classes.icon}/>My Profile</div>} 
-                         className={classes.tabButton}/>
+                        <Tab
+                            label={<div><MailOutline className={classes.icon}/>Received</div>}
+                            className={classes.tabButton}/>
+                        <Tab
+                            label={<div><Person className={classes.icon}/>My Profile</div>}
+                            className={classes.tabButton}/>
                     </Tabs>
                     <Tooltip title='Logout' className={classes.logout}>
-                        <Button color='secondary' variant='contained' onClick={handleLogout} className={classes.logoutButton}>
+                        <Button color='secondary' variant='contained' onClick={handleLogout}
+                                className={classes.logoutButton}>
                             <PowerSettingsNew/>
                         </Button>
                     </Tooltip>

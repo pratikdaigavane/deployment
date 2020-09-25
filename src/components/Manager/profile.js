@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { makeStyles,
-         Card } from '@material-ui/core'
+import React, {useEffect, useState} from 'react'
+import {Card, makeStyles} from '@material-ui/core'
 import Female from './../../images/female_avatar.svg'
 import axios from 'axios'
 
@@ -13,7 +12,7 @@ const useStyles = makeStyles((theme) => ({
     },
     card: {
         margin: '2%',
-        display:'inline block',
+        display: 'inline block',
     },
     table: {
         width: '50%',
@@ -25,7 +24,7 @@ const useStyles = makeStyles((theme) => ({
     },
     avatar: {
         padding: '1% 0',
-        margin:'1% 3%',
+        margin: '1% 3%',
         width: '250px',
         float: 'left'
     },
@@ -56,19 +55,18 @@ function Profile(props) {
         axios({
             method: "GET",
             headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Content-Type" : "application/json",
+                "Content-Type": "application/json",
                 Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
             },
-            url: '/api/user/profile/'
+            url: `${process.env.REACT_APP_HOST}/api/user/profile/`
         })
-        .then((res) => {
-            console.log(res.data)
-            setProfile(res.data)
-        })
-        .catch((error) => {
-            console.log(error)
-        })
+            .then((res) => {
+                console.log(res.data)
+                setProfile(res.data)
+            })
+            .catch((error) => {
+                console.log(error)
+            })
     }, profile)
 
     return (

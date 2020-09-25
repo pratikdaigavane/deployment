@@ -1,17 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import { AppBar, 
-        Tabs, 
-        Tab, 
-        Tooltip,
-        Button,
-        makeStyles } from '@material-ui/core'
-import { MailOutline,
-        WorkOutline,
-        Person ,
-        PowerSettingsNew,
-        ShowChart} from '@material-ui/icons'
+import React, {useEffect, useState} from 'react'
+import {AppBar, Button, makeStyles, Tab, Tabs, Tooltip} from '@material-ui/core'
+import {MailOutline, Person, PowerSettingsNew, ShowChart, WorkOutline} from '@material-ui/icons'
 import Routes from './routes'
-import { useHistory, useLocation } from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -34,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     tabButton: {
         paddingTop: '8px',
         '&.Mui-selected': {
-            outline: 'none',                                                                   
+            outline: 'none',
         },
         '&:hover': {
             outline: 'none'
@@ -49,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
         float: 'right',
         margin: '8px 10px',
         '&.Mui-selected': {
-            outline: 'none',                                                                   
+            outline: 'none',
         },
         '&:hover': {
             outline: 'none'
@@ -74,16 +65,16 @@ function Manager() {
 
     useEffect(() => {
         const path = location.pathname
-        if(path === '/manager/received') {
+        if (path === '/manager/received') {
             setTab(0);
         }
-        if(path.includes('/manager/employees')) {
+        if (path.includes('/manager/employees')) {
             setTab(1);
         }
-        if(path === '/manager/statistics') {
+        if (path === '/manager/statistics') {
             setTab(2);
         }
-        if(path === '/manager/profile') {
+        if (path === '/manager/profile') {
             setTab(3);
         }
     }, [location])
@@ -91,8 +82,8 @@ function Manager() {
     const handleTabChange = (e, value) => {
         const tabValue = value
         setTab(tabValue)
-        
-        switch(tabValue) {
+
+        switch (tabValue) {
             case 0:
                 history.push('/manager/received');
                 break;
@@ -122,27 +113,28 @@ function Manager() {
                 <div className='d-inline-block'>
                     <p className={classes.title}>PULSE &mdash; X</p>
                     <Tabs
-                     value={tabValue}
-                     onChange={handleTabChange}
-                     indicatorColor='primary'
-                     textColor='primary'
-                     className={classes.tab}
+                        value={tabValue}
+                        onChange={handleTabChange}
+                        indicatorColor='primary'
+                        textColor='primary'
+                        className={classes.tab}
                     >
-                        <Tab 
-                         label={<div><MailOutline className={classes.icon}/>Received</div>} 
-                         className={classes.tabButton}/>
-                        <Tab 
-                         label={<div><WorkOutline className={classes.icon}/>My Employees</div>}  
-                         className={classes.tabButton}/>
-                        <Tab 
-                         label={<div><ShowChart className={classes.icon}/>Statistics</div>}  
-                         className={classes.tabButton}/>
-                        <Tab 
-                         label={<div><Person className={classes.icon}/>My Profile</div>} 
-                         className={classes.tabButton}/>
+                        <Tab
+                            label={<div><MailOutline className={classes.icon}/>Received</div>}
+                            className={classes.tabButton}/>
+                        <Tab
+                            label={<div><WorkOutline className={classes.icon}/>My Employees</div>}
+                            className={classes.tabButton}/>
+                        <Tab
+                            label={<div><ShowChart className={classes.icon}/>Statistics</div>}
+                            className={classes.tabButton}/>
+                        <Tab
+                            label={<div><Person className={classes.icon}/>My Profile</div>}
+                            className={classes.tabButton}/>
                     </Tabs>
                     <Tooltip title='Logout' className={classes.logout}>
-                        <Button color='secondary' variant='contained' onClick={handleLogout} className={classes.logoutButton}>
+                        <Button color='secondary' variant='contained' onClick={handleLogout}
+                                className={classes.logoutButton}>
                             <PowerSettingsNew/>
                         </Button>
                     </Tooltip>

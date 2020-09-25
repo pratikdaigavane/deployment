@@ -1,17 +1,8 @@
-import React, { useState, useEffect } from 'react'
-import { AppBar, 
-         Tabs, 
-         Tab, 
-         makeStyles, 
-         Tooltip,
-         Button} from '@material-ui/core'
-import { BookmarkBorder,
-         Autorenew,
-         ShowChart,
-         Person, 
-         PowerSettingsNew} from '@material-ui/icons'
+import React, {useEffect, useState} from 'react'
+import {AppBar, Button, makeStyles, Tab, Tabs, Tooltip} from '@material-ui/core'
+import {Autorenew, BookmarkBorder, Person, PowerSettingsNew, ShowChart} from '@material-ui/icons'
 import Routes from './routes'
-import { useHistory, useLocation } from 'react-router-dom';
+import {useHistory, useLocation} from 'react-router-dom';
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -34,7 +25,7 @@ const useStyles = makeStyles((theme) => ({
     tabButton: {
         paddingTop: '8px',
         '&.Mui-selected': {
-            outline: 'none',                                                                   
+            outline: 'none',
         },
         '&:hover': {
             outline: 'none'
@@ -49,7 +40,7 @@ const useStyles = makeStyles((theme) => ({
         float: 'right',
         margin: '8px 10px',
         '&.Mui-selected': {
-            outline: 'none',                                                                   
+            outline: 'none',
         },
         '&:hover': {
             outline: 'none'
@@ -75,28 +66,28 @@ function Employee(props) {
 
     useEffect(() => {
         const path = location.pathname
-        if(path === '/employee/newest') {
+        if (path === '/employee/newest') {
             setTab(0);
         }
-        if(path === '/employee/saved') {
+        if (path === '/employee/saved') {
             setTab(1);
         }
-        if(path === '/employee/statistics') {
+        if (path === '/employee/statistics') {
             setTab(2);
         }
-        if(path === '/employee/profile') {
+        if (path === '/employee/profile') {
             setTab(3);
         }
 
-        
+
     }, [location])
 
 
     const handleTabChange = (e, value) => {
         const tabValue = value
         setTab(tabValue)
-        
-        switch(tabValue) {
+
+        switch (tabValue) {
             case 0:
                 history.push('/employee/newest');
                 break;
@@ -116,7 +107,7 @@ function Employee(props) {
     };
 
     const handleLogout = (e) => {
-        if(sessionStorage.getItem('data') && JSON.parse(sessionStorage.getItem('data')).length) {
+        if (sessionStorage.getItem('data') && JSON.parse(sessionStorage.getItem('data')).length) {
             console.log(JSON.parse(sessionStorage.getItem('data')))
         }
         sessionStorage.clear()
@@ -129,27 +120,28 @@ function Employee(props) {
                 <div className='d-inline-block'>
                     <p className={classes.title}>PULSE &mdash; X</p>
                     <Tabs
-                    value={tabValue}
-                    onChange={handleTabChange}
-                    indicatorColor='primary'
-                    textColor='primary'
-                    className={classes.tab}
+                        value={tabValue}
+                        onChange={handleTabChange}
+                        indicatorColor='primary'
+                        textColor='primary'
+                        className={classes.tab}
                     >
-                        <Tab 
-                         label={<div><Autorenew className={classes.icon}/>Newest</div>} 
-                         className={classes.tabButton}/>
-                        <Tab 
-                         label={<div><BookmarkBorder className={classes.icon}/>Saved</div>}  
-                         className={classes.tabButton}/>
-                        <Tab 
-                         label={<div><ShowChart className={classes.icon}/>Statistics</div>}  
-                         className={classes.tabButton}/>
-                        <Tab 
-                         label={<div><Person className={classes.icon}/>My Profile</div>} 
-                         className={classes.tabButton}/>
+                        <Tab
+                            label={<div><Autorenew className={classes.icon}/>Newest</div>}
+                            className={classes.tabButton}/>
+                        <Tab
+                            label={<div><BookmarkBorder className={classes.icon}/>Saved</div>}
+                            className={classes.tabButton}/>
+                        <Tab
+                            label={<div><ShowChart className={classes.icon}/>Statistics</div>}
+                            className={classes.tabButton}/>
+                        <Tab
+                            label={<div><Person className={classes.icon}/>My Profile</div>}
+                            className={classes.tabButton}/>
                     </Tabs>
                     <Tooltip title='Logout' className={classes.logout}>
-                        <Button color='secondary' variant='contained' onClick={handleLogout} className={classes.logoutButton}>
+                        <Button color='secondary' variant='contained' onClick={handleLogout}
+                                className={classes.logoutButton}>
                             <PowerSettingsNew/>
                         </Button>
                     </Tooltip>

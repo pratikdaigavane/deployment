@@ -1,19 +1,14 @@
-import React, { useState } from 'react'
-import { makeStyles, 
-         Card, 
-         CardContent, 
-         TextField, 
-         Button,
-         Snackbar } from '@material-ui/core'
-import { Alert } from '@material-ui/lab'
-import { useHistory } from 'react-router-dom'
+import React, {useState} from 'react'
+import {Button, Card, CardContent, makeStyles, Snackbar, TextField} from '@material-ui/core'
+import {Alert} from '@material-ui/lab'
+import {useHistory} from 'react-router-dom'
 import axios from 'axios'
 
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
         width: '100%',
-        height:'100vh',
+        height: '100vh',
         backgroundColor: '#dcdbe9',
     },
     card: {
@@ -58,16 +53,14 @@ function Login(props) {
 
     const handleLogin = (e) => {
         const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        if(!email || !password || !re.test(email)) {
+        if (!email || !password || !re.test(email)) {
             setValid(false)
-        }
-        else {
+        } else {
 
             axios({
                 method: "POST",
                 headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Content-Type" : "application/json"
+                    "Content-Type": "application/json"
                 },
                 data: {
                     "email": email,
@@ -75,23 +68,21 @@ function Login(props) {
                 },
                 url: `${process.env.REACT_APP_HOST}/api/user/login/`
             })
-            .then((res) => {
-                if(res.data) {
-                    sessionStorage.setItem('user', JSON.stringify(res.data))
-                    if(res.data.is_employee) {
-                        history.push('/employee')
+                .then((res) => {
+                    if (res.data) {
+                        sessionStorage.setItem('user', JSON.stringify(res.data))
+                        if (res.data.is_employee) {
+                            history.push('/employee')
+                        } else if (res.data.is_manager) {
+                            history.push('/manager')
+                        } else if (res.data.is_rnd) {
+                            history.push('/developer')
+                        }
                     }
-                    else if(res.data.is_manager) {
-                        history.push('/manager')
-                    }
-                    else if(res.data.is_rnd) {
-                        history.push('/developer')
-                    }
-                }
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
         }
     }
 
@@ -102,28 +93,28 @@ function Login(props) {
                 <CardContent>
                     <h3 className={classes.title}>LOGIN</h3>
                     <TextField
-                     variant='outlined'
-                     label='Email'
-                     onChange={(e) => { 
-                         setValid(true)
-                         setEmail(e.target.value) 
-                     }}
-                     className={classes.textfield}/>
+                        variant='outlined'
+                        label='Email'
+                        onChange={(e) => {
+                            setValid(true)
+                            setEmail(e.target.value)
+                        }}
+                        className={classes.textfield}/>
                     <TextField
-                     variant='outlined'
-                     label='Password'
-                     type='password'
-                     onChange={(e) => { 
-                         setValid(true)
-                         setPassword(e.target.value) 
-                     }}
-                     className={classes.textfield}/>
+                        variant='outlined'
+                        label='Password'
+                        type='password'
+                        onChange={(e) => {
+                            setValid(true)
+                            setPassword(e.target.value)
+                        }}
+                        className={classes.textfield}/>
                     <Button
-                     variant='contained'
-                     color='primary'
-                     disableElevation
-                     onClick={handleLogin}
-                     className={classes.button}
+                        variant='contained'
+                        color='primary'
+                        disableElevation
+                        onClick={handleLogin}
+                        className={classes.button}
                     >
                         Login
                     </Button>
@@ -132,12 +123,12 @@ function Login(props) {
                 </CardContent>
             </Card>
             <Snackbar
-             open={!valid}
-             autoHideDuration={1000}
-             anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'right',
-             }}
+                open={!valid}
+                autoHideDuration={1000}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                }}
             >
                 <Alert severity='error'>Invalid Credentials.</Alert>
             </Snackbar>

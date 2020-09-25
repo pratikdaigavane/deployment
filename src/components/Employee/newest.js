@@ -1,25 +1,21 @@
-import React, { useEffect, useState } from 'react'
-import { makeStyles, 
-        Card, 
-        CardHeader, 
-        CardContent,
-        Typography,
-        TextField, 
-        Button,
-        IconButton, 
-        Tooltip,
-        Snackbar,
-        CircularProgress } from '@material-ui/core'
-import { Alert } from '@material-ui/lab'
-import { Delete,
-        Visibility,
-        Mail,
-        Send,
-        Bookmark } from '@material-ui/icons'
-import { HiEmojiHappy,
-         HiEmojiSad,
-         HiFlag } from 'react-icons/hi'
-import { ImNeutral2 } from 'react-icons/im'
+import React, {useEffect, useState} from 'react'
+import {
+    Button,
+    Card,
+    CardContent,
+    CardHeader,
+    CircularProgress,
+    IconButton,
+    makeStyles,
+    Snackbar,
+    TextField,
+    Tooltip,
+    Typography
+} from '@material-ui/core'
+import {Alert} from '@material-ui/lab'
+import {Bookmark, Delete, Mail, Send, Visibility} from '@material-ui/icons'
+import {HiEmojiHappy, HiEmojiSad, HiFlag} from 'react-icons/hi'
+import {ImNeutral2} from 'react-icons/im'
 import GoalsMet from './../../images/goal_met.svg'
 import uuid from 'react-uuid'
 import axios from 'axios'
@@ -65,7 +61,7 @@ const useStyles = makeStyles((theme) => ({
     },
     actionButton: {
         '&:focus': {
-            outline: 'none !important',                                                                   
+            outline: 'none !important',
         },
     },
     menu: {
@@ -96,33 +92,31 @@ function Newest(props) {
 
     useEffect(() => {
         let data = []
-        if(sessionStorage.getItem('data') && JSON.parse(sessionStorage.getItem('data')).length) {
+        if (sessionStorage.getItem('data') && JSON.parse(sessionStorage.getItem('data')).length) {
             setDatasource(JSON.parse(sessionStorage.getItem('data')))
             sessionStorage.removeItem('data')
-        }
-        else {
+        } else {
             axios({
                 method: "GET",
                 headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Content-Type" : "application/json",
+                    "Content-Type": "application/json",
                     Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
                 },
-                url: '/api/employee/review/'
+                url: `${process.env.REACT_APP_HOST}/api/employee/review/`
             })
-            .then((res) => {
-                for(let i=0; i<res.data.review_set.length; i++) {
-                    data.push({
-                        id: uuid(),
-                        ...res.data.review_set[i]
-                    })
-                }
-                setDatasource(data)
-            })
-            .catch((error) => {
-                console.log(error)
-            })       
-        } 
+                .then((res) => {
+                    for (let i = 0; i < res.data.review_set.length; i++) {
+                        data.push({
+                            id: uuid(),
+                            ...res.data.review_set[i]
+                        })
+                    }
+                    setDatasource(data)
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
+        }
     }, [])
 
     useEffect(() => {
@@ -136,34 +130,32 @@ function Newest(props) {
             axios({
                 method: "GET",
                 headers: {
-                    "Access-Control-Allow-Origin": "*",
-                    "Content-Type" : "application/json",
+                    "Content-Type": "application/json",
                     Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
                 },
-                url: '/api/employee/review/'
+                url: `${process.env.REACT_APP_HOST}/api/employee/review/`
             })
-            .then((res) => {
-                let newData = [...datasource, ...res.data.review_set.map(val => ( {id: uuid(), ...val} ))]
-                setDatasource(newData)
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+                .then((res) => {
+                    let newData = [...datasource, ...res.data.review_set.map(val => ({id: uuid(), ...val}))]
+                    setDatasource(newData)
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
         }
     }
 
     const handleRemove = (e, flag) => {
 
         let current = datasource.find((post) => {
-            if(post.id === e.currentTarget.id) {
+            if (post.id === e.currentTarget.id) {
                 return post
             }
         })
         axios({
             method: "POST",
             headers: {
-                "Access-Control-Allow-Origin": "*",
-                "Content-Type" : "application/json",
+                "Content-Type": "application/json",
                 Authorization: `Bearer ${JSON.parse(sessionStorage.getItem("user")).token}`
             },
             data: {
@@ -182,18 +174,18 @@ function Newest(props) {
                 "url": current.url,
                 "flag": flag
             },
-            url: '/api/employee/review/'
+            url: `${process.env.REACT_APP_HOST}/api/employee/review/`
         })
 
-        .then((res) => {
-            
-        })
-        .catch((error) => {
-            console.log(error)
-        })
-        
+            .then((res) => {
+
+            })
+            .catch((error) => {
+                console.log(error)
+            })
+
         let posts = datasource.filter((post) => {
-            if(post.id != e.currentTarget.id)
+            if (post.id != e.currentTarget.id)
                 return post
         })
         setDatasource(posts)
@@ -223,163 +215,163 @@ function Newest(props) {
         handleRemove(e, 5)
     }
 
-    return(
+    return (
         <div className={classes.root} id='header'>
-                {
-                    datasource.map((post, index) => (
-                        <div>
-                            <Card className={classes.card} variant='outlined'>
-                                <CardHeader
-                                    title={<p className={classes.name}>{post.profile_name}</p>}
-                                    subheader={<p className={classes.date}>{post.date}</p>}
-                                    className={classes.heading}
-                                    action={
-                                        <div className={classes.fourButtons}>
-                                            {
-                                                post.sarcasm ?
-                                                    <Tooltip title='Sarcastic comment'>
-                                                        <IconButton>
-                                                            <HiFlag style={{color: "#f44336", fontSize: '25px'}} />
-                                                        </IconButton>
-                                                    </Tooltip> :
-                                                    null
-                                            }
-                                            {
-                                                post.sentiment === 1 ?
-                                                    <Tooltip title='Customer seems to be happy'>
-                                                        <IconButton>
-                                                            <HiEmojiHappy style={{color: "#4caf50", fontSize: '25px'}} />
-                                                        </IconButton>
-                                                    </Tooltip> :
-                                                    null
-                                            }
-                                            {
-                                                post.sentiment === -1 ?
-                                                    <Tooltip title='Customer seems to be disappointed'>
-                                                        <IconButton>
-                                                            <HiEmojiSad style={{color: "#f44336", fontSize: '25px'}} />
-                                                        </IconButton>
-                                                    </Tooltip> :
-                                                    null
-                                            }
-                                            {
-                                                post.sentiment === 0 ?
-                                                    <Tooltip title='Customer seems to be fine'>
-                                                        <IconButton>
-                                                            <ImNeutral2 style={{color: "#ff9800", fontSize: '20px'}} />
-                                                        </IconButton>
-                                                    </Tooltip> :
-                                                    null
-                                            }
-                                            <Tooltip title='Chuck'>
-                                                <IconButton 
+            {
+                datasource.map((post, index) => (
+                    <div>
+                        <Card className={classes.card} variant='outlined'>
+                            <CardHeader
+                                title={<p className={classes.name}>{post.profile_name}</p>}
+                                subheader={<p className={classes.date}>{post.date}</p>}
+                                className={classes.heading}
+                                action={
+                                    <div className={classes.fourButtons}>
+                                        {
+                                            post.sarcasm ?
+                                                <Tooltip title='Sarcastic comment'>
+                                                    <IconButton>
+                                                        <HiFlag style={{color: "#f44336", fontSize: '25px'}}/>
+                                                    </IconButton>
+                                                </Tooltip> :
+                                                null
+                                        }
+                                        {
+                                            post.sentiment === 1 ?
+                                                <Tooltip title='Customer seems to be happy'>
+                                                    <IconButton>
+                                                        <HiEmojiHappy style={{color: "#4caf50", fontSize: '25px'}}/>
+                                                    </IconButton>
+                                                </Tooltip> :
+                                                null
+                                        }
+                                        {
+                                            post.sentiment === -1 ?
+                                                <Tooltip title='Customer seems to be disappointed'>
+                                                    <IconButton>
+                                                        <HiEmojiSad style={{color: "#f44336", fontSize: '25px'}}/>
+                                                    </IconButton>
+                                                </Tooltip> :
+                                                null
+                                        }
+                                        {
+                                            post.sentiment === 0 ?
+                                                <Tooltip title='Customer seems to be fine'>
+                                                    <IconButton>
+                                                        <ImNeutral2 style={{color: "#ff9800", fontSize: '20px'}}/>
+                                                    </IconButton>
+                                                </Tooltip> :
+                                                null
+                                        }
+                                        <Tooltip title='Chuck'>
+                                            <IconButton
                                                 id={post.id}
                                                 onClick={handleDelete}
                                                 className={classes.actionButton}>
-                                                    <Delete/>
-                                                </IconButton>
-                                            </Tooltip>
-                                            <Tooltip title='Mark as Read'>
-                                                <IconButton 
+                                                <Delete/>
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip title='Mark as Read'>
+                                            <IconButton
                                                 id={post.id}
                                                 onClick={handleRead}
                                                 className={classes.actionButton}>
-                                                    <Visibility/>
-                                                </IconButton>
-                                            </Tooltip>
-                                            <Tooltip title='Send to Manager'>
-                                                <IconButton 
+                                                <Visibility/>
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip title='Send to Manager'>
+                                            <IconButton
                                                 id={post.id}
                                                 className={classes.actionButton}
                                                 onClick={handleSendToManager}>
-                                                    <Send/>
-                                                </IconButton>
-                                            </Tooltip>
-                                            <Tooltip title='Send to Developer'>
-                                                <IconButton 
+                                                <Send/>
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip title='Send to Developer'>
+                                            <IconButton
                                                 id={post.id}
                                                 className={classes.actionButton}
                                                 onClick={handleSendToDeveloper}>
-                                                    <Mail/>
-                                                </IconButton>
-                                            </Tooltip>
-                                            <Tooltip title='Save for Later'>
-                                                <IconButton 
+                                                <Mail/>
+                                            </IconButton>
+                                        </Tooltip>
+                                        <Tooltip title='Save for Later'>
+                                            <IconButton
                                                 id={post.id}
                                                 onClick={handleSave}
                                                 className={classes.actionButton}>
-                                                    <Bookmark/>
-                                                </IconButton>
-                                            </Tooltip>
-                                        </div>
-                                    }
-                                />
-                                <CardContent>
-                                    <Typography className={classes.text}>{post.text}</Typography>
-                                    <TextField 
+                                                <Bookmark/>
+                                            </IconButton>
+                                        </Tooltip>
+                                    </div>
+                                }
+                            />
+                            <CardContent>
+                                <Typography className={classes.text}>{post.text}</Typography>
+                                <TextField
                                     id={post.id}
                                     placeholder='Type a reply...'
                                     multiline
                                     variant='outlined'
                                     size='small'
                                     className={classes.reply}/>
-                                    <Button
+                                <Button
                                     id={post.id}
                                     variant='contained'
                                     color='primary'
                                     disableElevation
                                     onClick={handleReply}
                                     className={classes.replyButton}
-                                    >
-                                        Reply
-                                    </Button>
-                                </CardContent>
-                            </Card>
-                            <Snackbar 
+                                >
+                                    Reply
+                                </Button>
+                            </CardContent>
+                        </Card>
+                        <Snackbar
                             open={successbar}
                             autoHideDuration={1000}
                             anchorOrigin={{
                                 vertical: 'bottom',
                                 horizontal: 'left',
                             }}
-                            >
+                        >
                             {
-                                successbar ? 
+                                successbar ?
                                     <Alert severity='success'>{successbar}</Alert> :
                                     null
                             }
-                            </Snackbar>
-                            <Snackbar
+                        </Snackbar>
+                        <Snackbar
                             open={failbar}
                             autoHideDuration={1000}
                             anchorOrigin={{
                                 vertical: 'bottom',
                                 horizontal: 'left',
                             }}
-                            >
+                        >
                             {
-                                failbar ? 
+                                failbar ?
                                     <Alert severity='error'>{failbar}</Alert> :
                                     null
                             }
-                            </Snackbar>
+                        </Snackbar>
                     </div>
-                    ))
-                }
-                {
-                    !datasource.length ? 
-                        <div className={classes.noNewPost}>
-                            <img src={GoalsMet} alt='No new posts'/>
-                            <p className={classes.noNewText}>All done for now! Come back later for more.</p>
-                        </div> :
-                        <VisibilitySensor onChange={getReviews}>
-                            <Card className={classes.card}>
-                                <CardContent>
-                                    <CircularProgress className={classes.progress}/>
-                                </CardContent>
-                            </Card>
-                        </VisibilitySensor>
-                }
+                ))
+            }
+            {
+                !datasource.length ?
+                    <div className={classes.noNewPost}>
+                        <img src={GoalsMet} alt='No new posts'/>
+                        <p className={classes.noNewText}>All done for now! Come back later for more.</p>
+                    </div> :
+                    <VisibilitySensor onChange={getReviews}>
+                        <Card className={classes.card}>
+                            <CardContent>
+                                <CircularProgress className={classes.progress}/>
+                            </CardContent>
+                        </Card>
+                    </VisibilitySensor>
+            }
         </div>
     )
 }

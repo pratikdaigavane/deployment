@@ -1,14 +1,7 @@
-import React, { z, useState } from 'react'
-import { makeStyles, 
-         Card, 
-         CardContent, 
-         TextField, 
-         Button,
-         FormControl,
-         Select,
-         InputLabel } from '@material-ui/core'
-import { Alert } from '@material-ui/lab'
-import { useHistory } from 'react-router-dom'
+import React, {useState} from 'react'
+import {Button, Card, CardContent, FormControl, InputLabel, makeStyles, Select, TextField} from '@material-ui/core'
+import {Alert} from '@material-ui/lab'
+import {useHistory} from 'react-router-dom'
 import axios from 'axios'
 
 
@@ -73,20 +66,17 @@ function Register(props) {
 
     const handleRegister = (e) => {
         const re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
-        if(!email || !fname || !lname || !dept || !password || !re.test(email)) {
+        if (!email || !fname || !lname || !dept || !password || !re.test(email)) {
             setComplete(false)
-        }
-        else if(password !== confirm) {
+        } else if (password !== confirm) {
             setMatch(false)
-        }
-        else {
+        } else {
             let isManager = false
             let isDeveloper = false
 
-            if(dept === 'manager') {
+            if (dept === 'manager') {
                 isManager = true
-            }
-            else if(dept === 'developer') {
+            } else if (dept === 'developer') {
                 isDeveloper = true
             }
 
@@ -94,7 +84,7 @@ function Register(props) {
                 method: "POST",
                 headers: {
                     "Access-Control-Allow-Origin": "*",
-                    "Content-Type" : "application/json"
+                    "Content-Type": "application/json"
                 },
                 data: {
                     "email": email,
@@ -104,25 +94,23 @@ function Register(props) {
                     "is_manager": isManager,
                     "is_rnd": isDeveloper
                 },
-                url: "/api/user/register/"
+                url: `${process.env.REACT_APP_HOST}/api/user/register/`
             })
-            .then((res) => {
-                if(res.data) {
-                    sessionStorage.setItem('user', JSON.stringify(res.data))
-                    if(res.data.is_manager) {
-                        history.push('/manager')
+                .then((res) => {
+                    if (res.data) {
+                        sessionStorage.setItem('user', JSON.stringify(res.data))
+                        if (res.data.is_manager) {
+                            history.push('/manager')
+                        } else if (res.data.is_rnd) {
+                            history.push('/developer')
+                        }
+                    } else {
+                        setFail(true)
                     }
-                    else if(res.data.is_rnd) {
-                        history.push('/developer')
-                    }
-                }
-                else {
-                    setFail(true)
-                }
-            })
-            .catch((error) => {
-                console.log(error)
-            })
+                })
+                .catch((error) => {
+                    console.log(error)
+                })
         }
     }
 
@@ -132,69 +120,69 @@ function Register(props) {
                 <CardContent>
                     <h3 className={classes.title}>REGISTER</h3>
                     <TextField
-                     variant='outlined'
-                     label='First Name'
-                     onChange={(e) => { 
-                         setFname(e.target.value) 
-                         setComplete(true)
-                     }}
-                     className={classes.textfield2}/>
+                        variant='outlined'
+                        label='First Name'
+                        onChange={(e) => {
+                            setFname(e.target.value)
+                            setComplete(true)
+                        }}
+                        className={classes.textfield2}/>
                     <TextField
-                     variant='outlined'
-                     label='Last Name'
-                     onChange={(e) => { 
-                         setLname(e.target.value) 
-                         setComplete(true)
-                     }}
-                     className={classes.textfield2}/>
+                        variant='outlined'
+                        label='Last Name'
+                        onChange={(e) => {
+                            setLname(e.target.value)
+                            setComplete(true)
+                        }}
+                        className={classes.textfield2}/>
                     <TextField
-                     variant='outlined'
-                     label='Email'
-                     onChange={(e) => { 
-                         setEmail(e.target.value)
-                         setComplete(true) 
-                     }}
-                     className={classes.textfield}/>
+                        variant='outlined'
+                        label='Email'
+                        onChange={(e) => {
+                            setEmail(e.target.value)
+                            setComplete(true)
+                        }}
+                        className={classes.textfield}/>
                     <FormControl variant="outlined" className={classes.textfield}>
                         <InputLabel>Department</InputLabel>
                         <Select
-                         native
-                         onChange={(e) => { 
-                             setDept(e.target.value) 
-                             setComplete(true)
-                         }}
-                         label='Department'
+                            native
+                            onChange={(e) => {
+                                setDept(e.target.value)
+                                setComplete(true)
+                            }}
+                            label='Department'
                         >
                             <option value='manager'>Manager</option>
                             <option value='developer'>Developer</option>
                         </Select>
                     </FormControl>
                     <TextField
-                     variant='outlined'
-                     label='Password'
-                     type='password'
-                     onChange={(e) => { 
-                         setPassword(e.target.value)
-                         setComplete(true) 
-                         setMatch(true)
-                     }}
-                     className={classes.textfield}/>
+                        variant='outlined'
+                        label='Password'
+                        type='password'
+                        onChange={(e) => {
+                            setPassword(e.target.value)
+                            setComplete(true)
+                            setMatch(true)
+                        }}
+                        className={classes.textfield}/>
                     <TextField
-                     variant='outlined'
-                     label='Confirm Password'
-                     type='password'
-                     onChange={(e) => { 
-                         setConfirm(e.target.value) 
-                         setComplete(true)
-                         setMatch(true)
-                     }}
-                     className={classes.textfield}/>
+                        variant='outlined'
+                        label='Confirm Password'
+                        type='password'
+                        onChange={(e) => {
+                            setConfirm(e.target.value)
+                            setComplete(true)
+                            setMatch(true)
+                        }}
+                        className={classes.textfield}/>
                     <Button
-                     variant='contained'
-                     color='primary'
-                     disableElevation
-                     onClick={handleRegister}
-                     className={classes.button}
+                        variant='contained'
+                        color='primary'
+                        disableElevation
+                        onClick={handleRegister}
+                        className={classes.button}
                     >
                         Register
                     </Button>
